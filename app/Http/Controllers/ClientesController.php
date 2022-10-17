@@ -16,8 +16,9 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        $data = Cliente::orderBy('nome')->get();
-        return view('welcome', $data);
+        //$data = Cliente::orderBy('nome')->get();
+        //return view('welcome', $data);
+        return Cliente::orderBy('nome')->get();
     }
 
     /**
@@ -38,7 +39,21 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new Cliente;
+
+        $data->nome = $request->nome;
+        $data->cpf = $request->cpf;
+        $data->data_nascimento = $request->data_nascimento;
+        $data->sexo_id = $request->sexo_id;
+        $data->endereco = $request->endereco;
+        $data->cidade_id = $request->cidade_id;
+        $data->estado_id = $request->estado_id;
+
+        if($data->save()){
+            return 1;
+        }else{
+            return 2;
+        }
     }
 
     /**
@@ -49,7 +64,7 @@ class ClientesController extends Controller
      */
     public function show($id)
     {
-        //
+        return Cliente::find($id);
     }
 
     /**
@@ -72,7 +87,21 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = Cliente::find($id);
+
+        $data->nome = $request->nome;
+        $data->cpf = $request->cpf;
+        $data->data_nascimento = $request->data_nascimento;
+        $data->sexo_id = $request->sexo_id;
+        $data->endereco = $request->endereco;
+        $data->cidade_id = $request->cidade_id;
+        $data->estado_id = $request->estado_id;
+
+        if($data->save()){
+            return 1;
+        }else{
+            return 2;
+        }
     }
 
     /**
@@ -83,6 +112,12 @@ class ClientesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Cliente::find($id);
+
+        if($data->delete()){
+            return 1;
+        }else{
+            return 2;
+        }
     }
 }
