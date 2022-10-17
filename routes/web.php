@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\EstadosController;
+use App\Http\Controllers\CidadesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,9 @@ use App\Http\Controllers\ClientesController;
 Route::get('/' , function () {
     return view('welcome');
 });
-Route::resource('/clientes' , ClientesController::class);
+
+Route::resource('/clientes', ClientesController::class);
+Route::resource('/estados', EstadosController::class);
+Route::resource('/cidades', CidadesController::class);
+
+Route::get('/cidades/{id}/where', [CidadesController::class, 'where']);

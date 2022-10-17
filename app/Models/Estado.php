@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cliente extends Model
+class Estado extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Cliente extends Model
      *
      * @var string
      */
-    protected $table = 'clientes';
+    protected $table = 'estados';
 
     /**
      * The attributes that are mass assignable.
@@ -32,20 +32,5 @@ class Cliente extends Model
      */
     protected $primaryKey = 'id';
 
-    /**
-     * The relationships that should always be loaded.
-     *
-     * @var array
-     */
-    protected $with = ['estado', 'cidade'];
-
-    public function estado()
-    {
-        return $this->belongsTo(Estado::class);
-    }
-
-    public function cidade()
-    {
-        return $this->belongsTo(Cidade::class);
-    }
+    
 }

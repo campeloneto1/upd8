@@ -138,9 +138,8 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label for="estado_id">Estado</label>
-                                                <select class="custom-select rounded-0" name="estado_id" id="estado_id"> 
-                                                    <option></option>
-                                                    <option value=""></option>
+                                                <select onchange="getCidades()" class="custom-select rounded-0" name="estado_id" id="estado_id"> 
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -186,23 +185,10 @@
     </div>
     <script>
         $(document).ready(function(){
-            $.ajax({ url: "clientes",
-               headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            context: document.body,
-            success:function(response){
-                  //console.log(response);
-
-                  for (var i = 0; i < response.length; i++) {
-                     $("#tableClientes").append("<tr><td>" + response[i].id + "</td><td>" + response[i].nome + "</td><td>" + response[i].cpf + "</td><td>" + response[i].data_nascimento + "</td><td>" + response[i].sexo_id + "</td><td>" + response[i].endereco + "</td><td>" + response[i].cidade_id + "</td><td>" + response[i].estado_id + "</td></tr>");
-                 };
-                  $('#myTable').DataTable();
-             }
-         });
-
-            
+            refresh();
+            getEstados();
         });
+
         $("#savedata").click(function(event){
           event.preventDefault();
 
@@ -232,14 +218,14 @@
               _token: _token
           },
           success:function(response){
-              console.log(response);
+              //console.log(response);
               if(response == 1){
                 refresh();
 
             }
         },
         error: function(error) {
-         console.log(error);
+         //console.log(error);
 
      }
  });
@@ -256,9 +242,47 @@
                   //console.log(response);
 
                   for (var i = 0; i < response.length; i++) {
-                     $("#tableClientes").append("<tr><td>" + response[i].id + "</td><td>" + response[i].nome + "</td><td>" + response[i].cpf + "</td><td>" + response[i].data_nascimento + "</td><td>" + response[i].sexo_id + "</td><td>" + response[i].endereco + "</td><td>" + response[i].cidade_id + "</td><td>" + response[i].estado_id + "</td></tr>");
+                     $("#tableClientes").append("<tr><td>" + response[i].id + "</td><td>" + response[i].nome + "</td><td>" + response[i].cpf + "</td><td>" + response[i].data_nascimento + "</td><td>" + response[i].sexo_id + "</td><td>" + response[i].endereco + "</td><td>" + response[i].cidade.nome + "</td><td>" + response[i].estado.nome + "</td></tr>");
                  }
                  $('#myTable').DataTable();
+             },
+         });
+        }
+
+        function getEstados(){
+            $('#estado_id').html("");
+            $.ajax({ url: "estados",
+               headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            context: document.body,
+            success:function(response){
+                  //console.log(response);
+                  $("#estado_id").append('<option value=""></option>');
+                  for (var i = 0; i < response.length; i++) {
+                     $("#estado_id").append('<option value="'+response[i].id+'">' + response[i].nome + '</option>');
+                 }
+                 
+             },
+         });
+        }
+
+        function getCidades(){
+            var est = $("input[name=estado_id]").val();
+            console.log(est)
+            $('#cidade_id').html("");
+            $.ajax({ url: "cidades/"+est+"/where",
+               headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            context: document.body,
+            success:function(response){
+                  //console.log(response);
+                  $("#cidade_id").append('<option value=""></option>');
+                  for (var i = 0; i < response.length; i++) {
+                     $("#cidade_id").append('<option value="'+response[i].id+'">' + response[i].nome + '</option>');
+                 }
+                 
              },
          });
         }
