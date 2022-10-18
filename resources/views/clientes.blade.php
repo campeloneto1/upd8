@@ -29,6 +29,8 @@
         </div>
         @endif
 
+        
+
         <table id="myTable" class="table table-hover text-nowrap">
             <thead>
                 <tr>
@@ -52,12 +54,12 @@
                     <td>@if($cliente->data_nascimento){{date('d/m/Y',strtotime($cliente->data_nascimento))}}@endif</td>
                     <td>
                         @if($cliente->sexo_id)
-                            @if ($cliente->sexo_id == 1)
-                                Feminino
-                            @endif
-                            @if ($cliente->sexo_id == 2)
-                                Masculino
-                            @endif
+                        @if ($cliente->sexo_id == 1)
+                        Feminino
+                        @endif
+                        @if ($cliente->sexo_id == 2)
+                        Masculino
+                        @endif
                         @endif
                     </td>
                     <td>@if($cliente->endereco){{$cliente->endereco}}@endif</td>
@@ -249,17 +251,20 @@
 <!-- FIM MODAL EDITAR -->
 
 <script>
+   
 
     $(document).ready(function() {
         //refresh();
-        $('#myTable').DataTable(
-            {
-                order: [[1, 'asc']],
-            }
-        );
+        var table = $('#myTable').DataTable({
+            order: [
+                [1, 'asc']
+            ],
+        });
         //getEstados();
-    });
 
+        
+    });
+    
     function getCidades() {
         //var est = $("input[name=estado_id]").val();
         var idcid = 0;
@@ -302,7 +307,7 @@
 
     function deleteCliente(data) {
         //console.log(response);
-        if (confirm("Tem certeza que deseja excluir o cliente "+data.nome+"?") == true) {
+        if (confirm("Tem certeza que deseja excluir o cliente " + data.nome + "?") == true) {
             let _token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: "/clientes/" + data.id,
@@ -368,10 +373,10 @@
         });
     }
 
-    function confirmEdit(){
+    function confirmEdit() {
         let nome = $("input[name=nome2]").val();
         let cpf = $("input[name=cpf2]").val();
-        let data_nascimento = $("input[name=data_nascimento2]").val();        
+        let data_nascimento = $("input[name=data_nascimento2]").val();
         let endereco = $("input[name=endereco2]").val();
         var selectBox3 = document.getElementById('sexo_id2');
         var userInput3 = selectBox3.options[selectBox3.selectedIndex].value;
@@ -409,7 +414,7 @@
                 //console.log(error);
             }
         });
-       
+
     }
 </script>
 
