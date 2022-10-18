@@ -52,20 +52,20 @@
                     <td>@if($cliente->data_nascimento){{date('d/m/Y',strtotime($cliente->data_nascimento))}}@endif</td>
                     <td>
                         @if($cliente->sexo_id)
-                        @if ($cliente->sexo_id == 1)
-                        Feminino
-                        @endif
-                        @if ($cliente->sexo_id == 2)
-                        Masculino
-                        @endif
+                            @if ($cliente->sexo_id == 1)
+                                Feminino
+                            @endif
+                            @if ($cliente->sexo_id == 2)
+                                Masculino
+                            @endif
                         @endif
                     </td>
                     <td>@if($cliente->endereco){{$cliente->endereco}}@endif</td>
                     <td>@if($cliente->cidade){{$cliente->cidade->nome}}@endif</td>
                     <td>@if($cliente->estado){{$cliente->estado->nome}}@endif</td>
                     <td>
-                        <a onclick="editCliente({{$cliente}})" data-bs-toggle="modal" data-bs-target="#modal-editar" style="margin-left: 5px; cursor: pointer;"><i class="fa fa-edit text-primary" aria-hidden="true"></i></a>
-                        <a onclick="deleteCliente({{$cliente->id}})" style="margin-left: 5px; cursor: pointer;"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+                        <a onclick="editCliente({{$cliente}})" data-bs-toggle="modal" data-bs-target="#modal-editar" style="cursor: pointer;"><i class="fa fa-edit text-primary" aria-hidden="true"></i></a>
+                        <a onclick="deleteCliente({{$cliente}})" style="margin-left: 5px; cursor: pointer;"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
                     </td>
                 </tr>
                 @endforeach
@@ -240,7 +240,7 @@
                 </div>
                 <div class="modal-footer ">
                     <input type='reset' class="btn btn-default" value='Limpar' name='reset'>
-                    <button onclick="confirm()" id="savedata2" type="button" data-bs-dismiss="modal" class="btn btn-success">Salvar</button>
+                    <button onclick="confirmEdit()" type="button" data-bs-dismiss="modal" class="btn btn-success">Salvar</button>
                 </div>
             </form>
         </div>
@@ -249,9 +249,14 @@
 <!-- FIM MODAL EDITAR -->
 
 <script>
+
     $(document).ready(function() {
         //refresh();
-        $('#myTable').DataTable();
+        $('#myTable').DataTable(
+            {
+                order: [[1, 'asc']],
+            }
+        );
         //getEstados();
     });
 
@@ -295,12 +300,12 @@
         });
     }
 
-    function deleteCliente(response) {
+    function deleteCliente(data) {
         //console.log(response);
-        if (confirm("Tem certeza que deseja excluir o cliente?") == true) {
+        if (confirm("Tem certeza que deseja excluir o cliente "+data.nome+"?") == true) {
             let _token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: "/clientes/" + response,
+                url: "/clientes/" + data.id,
                 type: "DELETE",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -363,25 +368,20 @@
         });
     }
 
-    function confirm() {
+    function confirmEdit(){
         let nome = $("input[name=nome2]").val();
         let cpf = $("input[name=cpf2]").val();
-        let data_nascimento = $("input[name=data_nascimento2]").val();
-        
+        let data_nascimento = $("input[name=data_nascimento2]").val();        
         let endereco = $("input[name=endereco2]").val();
-
         var selectBox3 = document.getElementById('sexo_id2');
         var userInput3 = selectBox3.options[selectBox3.selectedIndex].value;
-
         var selectBox = document.getElementById('estado_id2');
         var userInput = selectBox.options[selectBox.selectedIndex].value;
-
         var selectBox2 = document.getElementById('cidade_id2');
         var userInput2 = selectBox2.options[selectBox2.selectedIndex].value;
-
-
         let id = $("input[name=id]").val();
         let _token = $('meta[name="csrf-token"]').attr('content');
+
         $.ajax({
             url: "/clientes/" + id,
             type: "PUT",
@@ -389,6 +389,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
+                id: id,
                 nome: nome,
                 cpf: cpf,
                 data_nascimento: data_nascimento,
@@ -408,6 +409,7 @@
                 //console.log(error);
             }
         });
+       
     }
 </script>
 
