@@ -17,10 +17,9 @@ use App\Http\Controllers\CidadesController;
 |
 */
 
-Route::get('/' , function () {
-    return view('welcome');
-});
 
+
+Route::resource('/', ClientesController::class);
 Route::resource('/clientes', ClientesController::class);
 Route::resource('/estados', EstadosController::class);
 Route::resource('/cidades', CidadesController::class);

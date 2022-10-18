@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use App\Models\Cliente;
-
+use App\Models\Estado;
 
 class ClientesController extends Controller
 {
@@ -16,9 +15,9 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        //$data = Cliente::orderBy('nome')->get();
-        //return view('welcome', $data);
-        return Cliente::orderBy('nome')->get();
+        $data = Cliente::orderBy('nome')->get();
+        $estados = Estado::orderBy('nome')->get();
+        return view('clientes')->with(['data' => $data, 'estados' =>$estados]);
     }
 
     /**
@@ -50,9 +49,9 @@ class ClientesController extends Controller
         $data->estado_id = $request->estado_id;
 
         if($data->save()){
-            return 1;
+            return  redirect('/')->with('success', 1);
         }else{
-            return 2;
+            return  redirect('/')->with('error', 2);
         }
     }
 
@@ -87,6 +86,7 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request);
         $data = Cliente::find($id);
 
         $data->nome = $request->nome;
@@ -98,9 +98,9 @@ class ClientesController extends Controller
         $data->estado_id = $request->estado_id;
 
         if($data->save()){
-            return 1;
+            return  1;
         }else{
-            return 2;
+            return  2;
         }
     }
 
@@ -115,9 +115,10 @@ class ClientesController extends Controller
         $data = Cliente::find($id);
 
         if($data->delete()){
-            return 1;
+            return  1;
         }else{
-            return 2;
+            return  2;
         }
+
     }
 }
